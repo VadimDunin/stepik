@@ -1,0 +1,1 @@
+chrome_driver_bin_path = '/usr/bin/chromedriver'
