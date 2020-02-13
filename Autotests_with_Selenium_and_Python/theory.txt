@@ -1,0 +1,86 @@
+<div class="col-sm-4">
+  <div class="card mb-4 box-shadow">
+    <img id="bullet" name="bullet-cat" data-type="animal" class="card-img-top" src="images/bullet_cat.jpg">
+  </div>
+</div>
+
+Поиск по id
+#bullet
+
+По значению атрибута
+[id=bullet]
+либо
+h1[value="Cat memes"]
+
+Поиск по тегу
+H1
+
+Поиск по name
+[name="bullet-cat"]
+
+
+
+Поиск class
+[class="jumbotron-heading"]
+короткий вариант поиска
+.jumbotron-heading
+
+<article id="moto" class="lead text-muted" title="one-thing" name="moto">If there's one thing that the internet was made for, it's funny cat memes.</article>
+
+[class="lead text-muted"] или [class="text-muted lead"]
+Второй вариант тоже будет работать, короткий вариант поиска
+.lead.text-muted
+
+
+
+Поиск элементов с помощью составных CSS-селекторов
+<div id="posts" class="post-list">
+  <div id="post1" class="item">
+    <div class="title">Как я провел лето</div>
+    <img src="./images/summer.png">
+  </div>
+  <div id="post2" class="item">
+    <div class="title second">Ходили купаться</div>
+    <img src="./images/bad_dog.jpg">
+  </div>
+  <div id="post3" class="item">
+    <div class="title">С друзьями</div>
+    <img src="./images/friends.jpg">
+  </div>
+</div>
+
+Ходили купаться
+#post2 .title
+#post2 - ищет id
+.title - ищет класс title
+
+#post2 > div.title 
+> ищет непосредственно ближайший дочерний элемент, пробелы в этом случае не учитываются
+
+Использование порядкового номера дочернего элемента
+"#posts > .item:nth-child(2) > .title"
+.item:nth-child(2) - любой дочерний элемент из списка доступных
+
+Если нужно найти элемент сразу по нескольким классам
+ ".title.second"
+
+XPath
+// - от начала документа
+
+Фильтры
+//img[@id='bullet'] - по значению атрибута id
+
+//div[@class="row"]/div[2] - выбрать номер элемента
+
+//p[text()="Lenin cat"] - по тексту ваключеному в тег <p>Lenin cat</p>
+
+По частичному совпадению
+
+//p[contains(text(), "cat")] - по совпадению текста
+
+//div[contains(@class, "navbar")] - по попаданию элемента в класс
+
+//img[@name='bullet-cat' and @data-type='animal'] - два условия
+
+Выбор всех элементов через *
+//div/*[@class="jumbotron-heading"]
