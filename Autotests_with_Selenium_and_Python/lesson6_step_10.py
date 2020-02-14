@@ -1,6 +1,6 @@
 from selenium import webdriver
 import time
-from Autotests_with_Selenium_and_Python.settings import chrome_driver_bin_path
+from settings import chrome_driver_bin_path
 
 try:
     link = "http://suninjuly.github.io/registration1.html"
@@ -13,13 +13,16 @@ try:
     # for element in required_elements:
     #     element.send_keys("test")
 
-    required_css_selectors_list = ['input[placeholder="Input your name"]',
+    required_css_selectors_list = ['input[placeholder="Input your first name"]',
                                     'input[placeholder="Input your last name"]',
                                     'input[placeholder="Input your email"]']
 
     for css_selector in required_css_selectors_list:
+        time.sleep(1)
         element = browser.find_element_by_css_selector(css_selector)
+        time.sleep(1)
         element.send_keys("text_sample")
+        time.sleep(1)
 
     # Отправляем заполненную форму
     button = browser.find_element_by_css_selector("button.btn")
