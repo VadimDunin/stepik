@@ -1,0 +1,14 @@
+from selenium import webdriver
+import time
+
+quick_fix = True
+
+browser = webdriver.Chrome()
+browser.get("http://suninjuly.github.io/wait1.html")
+if quick_fix:
+    time.sleep(1)
+button = browser.find_element_by_id("verify")
+button.click()
+message = browser.find_element_by_id("verify_message")
+
+assert "successful" in message.text
