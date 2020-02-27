@@ -5,9 +5,8 @@ from selenium import webdriver
 import math, time
 
 
-
 def click_submit_button():
-    submit_button = browser.find_element_by_css_selector("button.btn.btn-primary")
+    submit_button = browser.find_element_by_css_selector("button#solve.btn.btn-primary")
     submit_button.click()
 
 
@@ -33,14 +32,10 @@ def click_button_book():
 browser = webdriver.Chrome()
 browser.get("http://suninjuly.github.io/explicit_wait2.html")
 
-# button = browser.find_element_by_css("h5#price")
-button = WebDriverWait(browser, 12).until(
-        EC.text_to_be_present_in_element(By.CSS_SELECTOR, 'h5#price'))
+# ((By.ID, "price"), "$100")) - нужно передавать как tuple
+button = WebDriverWait(browser, 13).until(
+        EC.text_to_be_present_in_element((By.ID, "price"), "$100"))
 click_button_book()
-
-
-#button.click()
-#message = browser.find_element_by_id("verify_message")
-#button.click()
-#message = browser.find_element_by_id("verify_message")
-#assert "successful" in message.text
+value = get_value_element_value_and_calc_func()
+fill_form(value)
+click_submit_button()
