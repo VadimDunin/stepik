@@ -4,7 +4,6 @@ from settings import chrome_driver_bin_path
 import time, pytest
 
 
-
 link_on_reg_form1 = "http://suninjuly.github.io/registration1.html"
 required_css_selectors_list1 = ['input[placeholder="Input your first name"]',
                                    'input[placeholder="Input your last name"]',
@@ -16,57 +15,57 @@ required_css_selectors_list2 = ['input[placeholder="Input your name"]',
                                 'input[placeholder="Input your last name"]',
                                      'input[placeholder="Input your email"]']
 
-def check_sucsessfull_registration(self, browser):
-    # находим элемент, содержащий текст
-    welcome_text_elt = browser.find_element_by_tag_name("h1")
-    # записываем в переменную welcome_text текст из элемента welcome_text_elt
-    welcome_text = welcome_text_elt.text
-    # с помощью assert проверяем, что ожидаемый текст совпадает с текстом на странице сайта
-    self.assertEqual("Congratulations! You have successfully registered!", welcome_text)
+
+class Application:
+    def __init__(self):
+        self.wd = webdriver.Chrome(executable_path=chrome_driver_bin_path)
+        self.wd.implicitly_wait(60)
+
+    def open_page(self, link):
+        wd = self.wd
+        wd.get(link)
+
+    def destroy(self):
+        self.wd.quit()
+
+    def check_successfull_registration(self):
+        welcome_text_elt = self.wd.find_element_by_tag_name("h1")
+        welcome_text = welcome_text_elt.text
+        assert "Congratulations! You have successfully registered!" == welcome_text
+
+    def push_submit_button(self):
+        button = self.wd.find_element_by_css_selector("button.btn")
+        button.click()
+
+    def fill_form_wrong_solution(self, css_list):
+        for css_selector in css_list:
+            element = self.wd.find_element_by_css_selector(css_selector)
+            element.send_keys("text_sample")
 
 
-def push_submit_button(browser):
-    button = browser.find_element_by_css_selector("button.btn")
-    button.click()
+@pytest.fixture
+def app(request):
+    fixture = Application()
+    request.addfinalizer(fixture.destroy)
+    return fixture
 
 
-def fill_form_wrong_solution(browser, css_list):
-
-    for css_selector in css_list:
-        element = browser.find_element_by_css_selector(css_selector)
-        element.send_keys("text_sample")
-
-
-def open_main_page(link):
-    browser = webdriver.Chrome(executable_path=chrome_driver_bin_path)
-    browser.get(link)
-    return browser
-
-
-@pytest.fixture()
-def resource_setup(request):
-    browser = open_main_page()
-
-    def resource_teardown():
-        browser.quit()
-    request.addfinalizer(resource_teardown)
-
-
-def test_registration1(resource_setup):
-    browser = open_main_page(link_on_reg_form1)
-    fill_form_wrong_solution(browser, required_css_selectors_list1)
-    push_submit_button(browser)
+def test_registration1(app):
+    app.open_page(link_on_reg_form1)
+    app.fill_form_wrong_solution(required_css_selectors_list1)
+    app.push_submit_button()
     time.sleep(1)
-    check_sucsessfull_registration(browser)
+    app.check_successfull_registration()
     time.sleep(10)
-    browser.quit()
+    app.destroy()
 
 
-def test_registration2():
-    browser = open_main_page(link_on_reg_form2)
-    fill_form_wrong_solution(browser, required_css_selectors_list2)
-    push_submit_button(browser)
+# по заданию в степике - второй тест должен отваливаится
+def test_registration2(app):
+    app.open_page(link_on_reg_form1)
+    app.fill_form_wrong_solution(required_css_selectors_list2)
+    app.push_submit_button()
     time.sleep(1)
-    check_sucsessfull_registration(browser)
+    app.check_successfull_registration()
     time.sleep(10)
-    browser.quit()
+    app.destroy()
